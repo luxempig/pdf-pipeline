@@ -330,7 +330,13 @@ tail -f logs/pipeline.log
 
 ## 📄 License
 
-MIT License - see LICENSE file for details.
+This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0).
+
+**Personal and Educational Use**: Free to use, modify, and distribute for non-commercial purposes.
+
+**Commercial Use**: Requires explicit written permission from the copyright holder. Contact luxempig for commercial licensing.
+
+See LICENSE file for full details.
 
 ## 🆘 Support
 
