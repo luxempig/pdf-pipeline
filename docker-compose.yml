@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  pdf-pipeline:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    volumes:
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+      - ./.env:/app/.env
+    depends_on:
+      - ollama
+    networks:
+      - pipeline-network
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+    networks:
+      - pipeline-network
+    restart: unless-stopped
+    # Uncomment below if you have GPU support
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+  # Optional: Playwright service for complex portal automation
+  playwright:
+    build:
+      context: .
+      dockerfile: Dockerfile.playwright
+    volumes:
+      - ./src:/app/src
+      - ./logs:/app/logs
+    environment:
+      - DISPLAY=:99
+    networks:
+      - pipeline-network
+    profiles:
+      - playwright
+
+volumes:
+  ollama_data:
+
+networks:
+  pipeline-network:
+    driver: bridge
